@@ -16,10 +16,18 @@ class HybirdCrypto(object):
                  seckey_name = 'seckey.pem',
                  init_mode = 'write'):
         if init_mode == 'write' :
-            self.__key = RSA.read(pubkey_name)
+            try:
+                self.__key = RSA.read(pubkey_name)
+            except:
+                print('Could not load public key.\nFile damaged or does not exist.')
+                exit(-1)
         else:
             passphrase = getpass.getpass('RSA Passphrase:')
-            self.__key = RSA.read(seckey_name, passphrase = passphrase)
+            try:
+                self.__key = RSA.read(seckey_name, passphrase = passphrase)
+            except:
+                print('Could not load public key.\nWrong passphrase or File damaged or does not exist.')
+                exit(-1)
             wipe_object(passphrase)
             del passphrase
         self.__cipher = RSA_chiper.new(self.__key)
