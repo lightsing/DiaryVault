@@ -24,7 +24,8 @@ class Editor(object):
         with open(file_name, mode='w+b') as writer:
             writer.write(data)
 
-    def load_file(self, file_name):
+    def load_file(self):
+        file_name = input('Load File Name:')
         hybirdCrypto = HybirdCrypto(init_mode='read')
         with open(file_name, mode='rb') as reader:
             raw = reader.read()
