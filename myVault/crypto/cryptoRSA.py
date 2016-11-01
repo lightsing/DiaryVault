@@ -1,5 +1,5 @@
 from Crypto.PublicKey import RSA
-from util.crypto import password
+from myVault.crypto import password
 
 def new(bits=2048):
     new_key = RSA.generate(bits, e=65537)

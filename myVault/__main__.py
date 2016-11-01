@@ -1,6 +1,6 @@
-from util.editor import Editor
-from util.menu import Menu
-from util.crypto import cryptoRSA
+from myVault.editor import Editor
+from myVault.menu import Menu
+from myVault.crypto import cryptoRSA
 
 
 if __name__ == '__main__':

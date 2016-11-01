@@ -1,7 +1,7 @@
 import tempfile, os
 from subprocess import call
 
-from util.crypto.hybirdCrypto import HybirdCrypto
+from myVault.crypto.hybirdCrypto import HybirdCrypto
 
 class Editor(object):
     def __init__(self,

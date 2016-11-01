@@ -1,8 +1,8 @@
 import sys
 import ctypes
 import getpass
-import util.crypto.cryptoRSA as RSA
-import util.crypto.cryptoAES as AES
+import myVault.crypto.cryptoRSA as RSA
+import myVault.crypto.cryptoAES as AES
 from Crypto.Cipher import PKCS1_v1_5 as RSA_chiper
 from Crypto import Random
 
