@@ -1,7 +1,7 @@
-import sys, tempfile, os
+import tempfile, os
 from subprocess import call
 
-from util.crypto.hybirdCrypto import HybirdCrypto, wipe_object
+from util.crypto.hybirdCrypto import HybirdCrypto
 
 class Editor(object):
     def __init__(self,
@@ -9,7 +9,6 @@ class Editor(object):
                  init_message= "Let's save your diary in vault."):
         self.__editor = os.environ.get('EDITOR', sys_editor)
         self.__initMessage = init_message
-        self.__writeEncrypt = HybirdCrypto()
 
     def __new_msg(self):
         with tempfile.NamedTemporaryFile(mode='w+') as temp:
@@ -36,7 +35,7 @@ class Editor(object):
                 call([self.__editor, temp.name])
 
     def new_file(self):
+        writeEncrypt = HybirdCrypto()
         self.__save(input('New File Name:'),
-                    self.__writeEncrypt.encrypt(
-                        self.__new_msg()))
+                    writeEncrypt.encrypt(self.__new_msg()))
 
