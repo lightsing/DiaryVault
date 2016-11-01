@@ -1,6 +1,6 @@
-from myVault.editor import Editor
-from myVault.menu import Menu
-from myVault.crypto import cryptoRSA
+import myVault.editor.Editor as Editor
+import myVault.menu.Menu as Menu
+import myVault.crypto.cryptoRSA as RSA
 
 
 if __name__ == '__main__':
@@ -10,7 +10,7 @@ if __name__ == '__main__':
         ('New File','Load File','New KeyPair','Exit'),
         (editor.new_file,
          editor.load_file,
-         cryptoRSA.generate,
+         RSA.generate,
          exit))
     while True:
         menu.display()
