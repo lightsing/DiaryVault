@@ -1,6 +1,7 @@
 from Crypto.PublicKey import RSA
+from util.crypto import password
 
-def generate(bits=2048):
+def new(bits=2048):
     new_key = RSA.generate(bits, e=65537)
     return new_key
 
@@ -19,3 +20,22 @@ def read(name,passphrase = None):
         key_bin = key_file.read()
     return RSA.importKey(key_bin,passphrase=passphrase)
 
+
+def generate():
+    print("\n--------------RSA Generate--------------\n")
+    print("Warning: this will cover the old RSA key pair.(if exists)")
+    while True:
+        try:
+            bits = input("RSA bits length (1024, 2048, 4096; leave blank for 2048 as default):")
+            if bits:
+                bits = int(bits)
+            else:
+                bits = 2048
+            assert(bits in (1024, 2048, 4096))
+            break
+        except:
+            print("Invalid bit length.")
+    passphrase = password.get("Please enter a passphrase for private key:")
+    print("Generating RSA Key Pair.")
+    write(new(bits=bits),passphrase=passphrase)
+    print("\n----------FINISH RSA Generate----------\n")
