@@ -1,12 +1,13 @@
 from . import config
-from . crypto import cryptoRSA
-from . import editor
-from . import menu
+from .crypto import cryptoRSA
+from .editor import Editor
+from .menu import Menu
 
-if __name__ == '__main__':
+
+def main():
     print("------------My Vault v%s------------\n" % config.version)
-    editor = editor.Editor()
-    menu = menu.Menu(
+    editor = Editor()
+    menu = Menu(
         ('New File','Load File','New KeyPair','Exit'),
         (editor.new_file,
          editor.load_file,
@@ -14,4 +15,7 @@ if __name__ == '__main__':
          exit))
     while True:
         menu.display()
+
+if __name__ == '__main__':
+    main()
 
