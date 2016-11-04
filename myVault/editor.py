@@ -3,9 +3,9 @@ import os
 import tempfile
 from subprocess import call
 
-import config
-import crypto.cryptoRSA as RSA
-from crypto.hybirdCrypto import HybirdCrypto
+from . import config
+from .crypto import cryptoRSA as RSA
+from .crypto.hybirdCrypto import HybirdCrypto
 
 
 class Editor(object):

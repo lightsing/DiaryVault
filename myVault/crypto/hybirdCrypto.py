@@ -2,13 +2,12 @@ import ctypes
 import getpass
 import sys
 from pathlib import Path
-
+from Crypto import Random
 from Crypto.Cipher import PKCS1_v1_5 as RSA_chiper
 
-import config
-import crypto.cryptoAES as AES
-import crypto.cryptoRSA as RSA
-from Crypto import Random
+from .. import config
+from . import cryptoAES as AES
+from . import cryptoRSA as RSA
 
 
 def wipe_object(obj):

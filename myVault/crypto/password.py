@@ -1,5 +1,6 @@
 from getpass import getpass
 
+
 def get(prompt="Please enter a password:"):
     print("\nPassword should be at least 12 characters.")
     while True:

@@ -1,9 +1,8 @@
 from pathlib import Path
-
 from Crypto.PublicKey import RSA
 
-import config
-from crypto import password
+from .. import config
+from . import password
 
 
 def new(bits):
