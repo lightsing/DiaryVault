@@ -49,16 +49,23 @@ class Editor(object):
         hybird_crypto = HybirdCrypto(self._config.getint("RSA", "length"),
                                      self._config.get("basic", "driver_name"),
                                      init_mode='read')
-        with open(file_name, mode='rb') as reader:
-            raw = reader.read()
-            data = hybird_crypto.decrypt(raw)
-            with tempfile.NamedTemporaryFile(mode='w+b') as temp:
-                temp.write(data)
-                temp.flush()
-                call([self._editor, temp.name])
+        try:
+            with open(file_name, mode='rb') as reader:
+                raw = reader.read()
+                data = hybird_crypto.decrypt(raw)
+                with tempfile.NamedTemporaryFile(mode='w+b') as temp:
+                    temp.write(data)
+                    temp.flush()
+                    call([self._editor, temp.name])
+        except FileNotFoundError:
+            print("\n Error:File Not Found.")
 
     def new_file(self):
         write_encrypt = HybirdCrypto(self._config.getint("RSA", "length"),
                                      self._config.get("basic", "driver_name"))
-        self._save(input('New File Name:'),
-                   write_encrypt.encrypt(self._new_msg()))
+        file_name = input('New File Name:')
+        if file_name:
+            self._save(file_name,
+                       write_encrypt.encrypt(self._new_msg()))
+        else:
+            print("\n Error:File Name Can Not Be Blank.")

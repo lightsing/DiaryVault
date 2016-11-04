@@ -5,6 +5,7 @@ class Menu(object):
         self.__func = func
 
     def choice(self):
+        print()
         for content in enumerate(self.__menu, start=1):
             print("%d. %s" % content)
         while True:
