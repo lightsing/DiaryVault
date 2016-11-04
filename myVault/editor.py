@@ -1,9 +1,12 @@
-import tempfile, os, configparser
+import configparser
+import os
+import tempfile
 from subprocess import call
 
-import myVault.config
-from myVault.crypto.hybirdCrypto import HybirdCrypto
-import myVault.crypto.cryptoRSA as RSA
+import config
+import crypto.cryptoRSA as RSA
+from crypto.hybirdCrypto import HybirdCrypto
+
 
 class Editor(object):
     def __init__(self):
@@ -14,14 +17,14 @@ class Editor(object):
 
     def _init_config(self):
         self._config.add_section("basic")
-        self._config.set("basic", "version", myVault.config.version)
-        self._config.set("basic", "editor", myVault.config.editor)
-        self._config.set("basic", "init_msg", myVault.config.init_message)
+        self._config.set("basic", "version", config.version)
+        self._config.set("basic", "editor", config.editor)
+        self._config.set("basic", "init_msg", config.init_message)
         length, driver_name = RSA.generate()
         self._config.add_section("RSA")
         self._config.set("RSA", "length", str(length))
         self._config.set("basic", "driver_name", driver_name)
-        with open(myVault.config.name, "w") as config_file:
+        with open(config.name, "w") as config_file:
             self._config.write(config_file)
 
     def _check_config(self):
@@ -43,7 +46,9 @@ class Editor(object):
 
     def load_file(self):
         file_name = input('Load File Name:')
-        hybird_crypto = HybirdCrypto(self._config.getint("RSA", "length"), init_mode='read')
+        hybird_crypto = HybirdCrypto(self._config.getint("RSA", "length"),
+                                     self._config.get("basic", "driver_name"),
+                                     init_mode='read')
         with open(file_name, mode='rb') as reader:
             raw = reader.read()
             data = hybird_crypto.decrypt(raw)
@@ -53,6 +58,7 @@ class Editor(object):
                 call([self._editor, temp.name])
 
     def new_file(self):
-        write_encrypt = HybirdCrypto(self._config.getint("RSA", "length"))
+        write_encrypt = HybirdCrypto(self._config.getint("RSA", "length"),
+                                     self._config.get("basic", "driver_name"))
         self._save(input('New File Name:'),
                    write_encrypt.encrypt(self._new_msg()))

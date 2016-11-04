@@ -1,7 +1,10 @@
-from Crypto.PublicKey import RSA
-from myVault.crypto import password
 from pathlib import Path
-import myVault.config
+
+from Crypto.PublicKey import RSA
+
+import config
+from crypto import password
+
 
 def new(bits):
     new_key = RSA.generate(bits, e=65537)
@@ -14,7 +17,7 @@ def write(new_key, passphrase):
         pub_key_file.write(public_key)
     private_key = new_key.exportKey(passphrase=passphrase)
     input("Please insert a removable driver.\nPress enter to continue.")
-    path = Path(myVault.config.mount_point)
+    path = Path(config.mount_point)
     while True:
         driver_name = input("Please enter the name of the removable driver:")
         location = path / driver_name

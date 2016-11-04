@@ -1,12 +1,14 @@
-import sys, ctypes, getpass
+import ctypes
+import getpass
+import sys
 from pathlib import Path
 
-from Crypto import Random
 from Crypto.Cipher import PKCS1_v1_5 as RSA_chiper
 
-import myVault.config
-import myVault.crypto.cryptoRSA as RSA
-import myVault.crypto.cryptoAES as AES
+import config
+import crypto.cryptoAES as AES
+import crypto.cryptoRSA as RSA
+from Crypto import Random
 
 
 def wipe_object(obj):
@@ -27,7 +29,7 @@ class HybirdCrypto(object):
                 print('Could not load public key.\nFile damaged or does not exist.')
                 exit(-1)
         else:
-            path = Path(myVault.config.mount_point) / driver_name / seckey_name
+            path = Path(config.mount_point) / driver_name / seckey_name
             passphrase = getpass.getpass('RSA Passphrase:')
             try:
                 self.__key = RSA.read(str(path), passphrase = passphrase)
