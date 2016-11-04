@@ -1,16 +1,18 @@
-import myVault.editor.Editor as Editor
-import myVault.menu.Menu as Menu
-import myVault.crypto.cryptoRSA as RSA
+import myVault.config
+import myVault.editor
+import myVault.menu
+import myVault.crypto.cryptoRSA
+
 
 
 if __name__ == '__main__':
-    print("-------------My Vault v0.1-------------\n")
-    editor = Editor()
-    menu = Menu(
+    print("------------My Vault v%s------------\n" % myVault.config.version)
+    editor = myVault.editor.Editor()
+    menu = myVault.menu.Menu(
         ('New File','Load File','New KeyPair','Exit'),
         (editor.new_file,
          editor.load_file,
-         RSA.generate,
+         myVault.crypto.cryptoRSA.generate,
          exit))
     while True:
         menu.display()

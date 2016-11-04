@@ -1,41 +1,58 @@
-import tempfile, os
+import tempfile, os, configparser
 from subprocess import call
 
+import myVault.config
 from myVault.crypto.hybirdCrypto import HybirdCrypto
+import myVault.crypto.cryptoRSA as RSA
 
 class Editor(object):
-    def __init__(self,
-                 sys_editor="nano",
-                 init_message= "Let's save your diary in vault."):
-        self.__editor = os.environ.get('EDITOR', sys_editor)
-        self.__initMessage = init_message
+    def __init__(self):
+        self._config = configparser.ConfigParser()
+        self._check_config()
+        self._editor = os.environ.get('EDITOR', self._config.get("basic", "editor"))
+        self._initMessage = self._config.get("basic", "init_msg")
 
-    def __new_msg(self):
+    def _init_config(self):
+        self._config.add_section("basic")
+        self._config.set("basic", "version", myVault.config.version)
+        self._config.set("basic", "editor", myVault.config.editor)
+        self._config.set("basic", "init_msg", myVault.config.init_message)
+        length, driver_name = RSA.generate()
+        self._config.add_section("RSA")
+        self._config.set("RSA", "length", str(length))
+        self._config.set("basic", "driver_name", driver_name)
+        with open(myVault.config.name, "w") as config_file:
+            self._config.write(config_file)
+
+    def _check_config(self):
+        if not self._config.read(".myVault"):
+            self._init_config()
+
+    def _new_msg(self):
         with tempfile.NamedTemporaryFile(mode='w+') as temp:
-            temp.write(self.__initMessage)
+            temp.write(self._initMessage)
             temp.flush()
-            call([self.__editor, temp.name])
+            call([self._editor, temp.name])
             temp.seek(0)
             return temp.read()
 
     @staticmethod
-    def __save(file_name, data):
+    def _save(file_name, data):
         with open(file_name, mode='w+b') as writer:
             writer.write(data)
 
     def load_file(self):
         file_name = input('Load File Name:')
-        hybirdCrypto = HybirdCrypto(init_mode='read')
+        hybird_crypto = HybirdCrypto(self._config.getint("RSA", "length"), init_mode='read')
         with open(file_name, mode='rb') as reader:
             raw = reader.read()
-            data = hybirdCrypto.decrypt(raw)
+            data = hybird_crypto.decrypt(raw)
             with tempfile.NamedTemporaryFile(mode='w+b') as temp:
                 temp.write(data)
                 temp.flush()
-                call([self.__editor, temp.name])
+                call([self._editor, temp.name])
 
     def new_file(self):
-        writeEncrypt = HybirdCrypto()
-        self.__save(input('New File Name:'),
-                    writeEncrypt.encrypt(self.__new_msg()))
-
+        write_encrypt = HybirdCrypto(self._config.getint("RSA", "length"))
+        self._save(input('New File Name:'),
+                   write_encrypt.encrypt(self._new_msg()))

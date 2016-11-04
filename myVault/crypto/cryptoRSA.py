@@ -1,7 +1,9 @@
 from Crypto.PublicKey import RSA
 from myVault.crypto import password
+from pathlib import Path
+import myVault.config
 
-def new(bits=2048):
+def new(bits):
     new_key = RSA.generate(bits, e=65537)
     return new_key
 
@@ -11,8 +13,18 @@ def write(new_key, passphrase):
     with open('pubkey.pem', 'wb') as pub_key_file:
         pub_key_file.write(public_key)
     private_key = new_key.exportKey(passphrase=passphrase)
-    with open('seckey.pem', 'wb') as sec_key_file:
+    input("Please insert a removable driver.\nPress enter to continue.")
+    path = Path(myVault.config.mount_point)
+    while True:
+        driver_name = input("Please enter the name of the removable driver:")
+        location = path / driver_name
+        if location.is_dir():
+            break
+        else:
+            input("Invalid driver name.\nPress enter to continue.")
+    with Path.open(location / 'seckey.pem', 'wb') as sec_key_file:
         sec_key_file.write(private_key)
+    return driver_name
 
 
 def read(name,passphrase = None):
@@ -37,5 +49,6 @@ def generate():
             print("Invalid bit length.")
     passphrase = password.get("Please enter a passphrase for private key:")
     print("Generating RSA Key Pair.")
-    write(new(bits=bits),passphrase=passphrase)
+    driver_name = write(new(bits=bits),passphrase=passphrase)
     print("\n----------FINISH RSA Generate----------\n")
+    return bits, driver_name
