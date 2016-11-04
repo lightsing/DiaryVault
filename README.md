@@ -6,15 +6,23 @@ A RSA-AES Based Diary Vault
 
 Python 3.5
 
-
-Install requirements by:
+## Install
 
 ```
-pip install -r requirements
+pip install git+https://github.com/lightsing/DiaryVault
 ```
 
 It mights be `pip3` on your system.
 
 ## How to use
 
-execute `main.py`
+```
+$ myVault
+```
+
+or
+
+```
+$ python -m myVault
+```
+
