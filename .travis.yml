@@ -8,8 +8,10 @@ python:
 install:
   - pip install .
 
+script:
+  - python setup.py bdist_wheel
 before_deploy:
-  - setup.py bdist_wheel
+  - python setup.py bdist_wheel
 
 deploy:
   provider: releases
